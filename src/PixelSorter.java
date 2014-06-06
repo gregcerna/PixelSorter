@@ -33,12 +33,12 @@ public class PixelSorter extends JPanel {
 	public static final int BRIGHT = 1;
 	public static final int WHITE = 2;
 	
-	private int mode = BLACK;
+	private int mode = BRIGHT;
 	
 	
 	private int blackValue = -13487566;//-10000000;
-	private int brightnessValue = 60;
-	private int whiteValue = -6000000;
+	private int brightnessValue = 0;
+	private int whiteValue = -3618616;//-6000000;
 	
 	private int row = 0;
 	private int column = 0;
@@ -50,6 +50,11 @@ public class PixelSorter extends JPanel {
 	
 	public void setMode(int newMode){
 		mode = newMode;
+		draw();
+	}
+	public void setBrightness(int newBrightness){
+		brightnessValue = newBrightness;
+		draw();
 	}
 	
 	
@@ -84,6 +89,8 @@ public class PixelSorter extends JPanel {
 	public void paintComponent (Graphics g) 
 	{ 
 		g.drawImage(img, 0, 0, null);
+		
+		setBrightness(brightnessValue+10);
 		//repaint();
 	} 
 
@@ -95,6 +102,8 @@ public class PixelSorter extends JPanel {
 		img = deepCopy(origImg);
 		
 		if(mode != ORIGINAL){
+			
+			
 			while(column < width-1) {
 				sortColumn();
 				column++;
@@ -202,7 +211,8 @@ public class PixelSorter extends JPanel {
 	private int getFirstNotBlackX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  Color c;
+	  
+	  
 	  while((img.getRGB(x, y)) < blackValue) {
 	    x++;
 	    if(x >= width) return -1;
@@ -213,6 +223,9 @@ public class PixelSorter extends JPanel {
 	private int getNextBlackX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
+	  
+	  if(x >= width) return width-1;
+	  
 	  while((img.getRGB(x, y)) > blackValue) {
 	    x++;
 	    if(x >= width) return width-1;
@@ -236,6 +249,8 @@ public class PixelSorter extends JPanel {
 	  int x = _x+1;
 	  int y = _y;
 	  
+	  if(x >= width) return width-1;
+	  
 	  while(getBrightness(img.getRGB(x, y)) > brightnessValue) {
 	    x++;
 	    if(x >= width) return width-1;
@@ -258,7 +273,9 @@ public class PixelSorter extends JPanel {
 	private int getNextWhiteX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
-
+	  
+	  if(x >= width) return width -1;
+	  
 	  while((img.getRGB(x, y)) < whiteValue) {
 	    x++;
 	    if(x >= width) return width-1;

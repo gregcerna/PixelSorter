@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 
 public class SorterFrame extends JFrame {
@@ -20,12 +23,13 @@ public class SorterFrame extends JFrame {
 	private PixelSorter sorter;
 	private final int borderWidth = 5;
 	
-	String imgName = "cat.jpg";
+	String imgName = "me.jpg";
 	private JRadioButton rdbtnBlackMode;
 	private JRadioButton rdbtnBrightnessMode;
 	private JRadioButton rdbtnWhiteMode;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JRadioButton rdbtnOriginal;
+	private JSlider slider;
 
 	/**
 	 * Launch the application.
@@ -48,7 +52,7 @@ public class SorterFrame extends JFrame {
 	 */
 	public SorterFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 700);
+		setBounds(100, 100, 700, 750);
 		contentPane = new JPanel();
 		//setBounds(100, 100, width, height);
 		
@@ -56,7 +60,7 @@ public class SorterFrame extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 50, 0};
 		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
@@ -71,71 +75,85 @@ public class SorterFrame extends JFrame {
 		gbc_sorter.gridy = 0;
 		contentPane.add(sorter, gbc_sorter);
 		
-		JButton btnSort = new JButton("Sort");
-		btnSort.addActionListener(new ActionListener() {
+		rdbtnWhiteMode = new JRadioButton("White Mode");
+		rdbtnWhiteMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sorter.draw();
+				slider.setEnabled(false);
+				sorter.setMode(PixelSorter.WHITE);
+			}
+		});
+		
+		rdbtnBrightnessMode = new JRadioButton("Brightness Mode");
+		rdbtnBrightnessMode.setSelected(true);
+		rdbtnBrightnessMode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				slider.setEnabled(true);
+				sorter.setMode(PixelSorter.BRIGHT);
 			}
 		});
 		
 		rdbtnBlackMode = new JRadioButton("Black Mode");
-		rdbtnBlackMode.setSelected(true);
 		rdbtnBlackMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				slider.setEnabled(false);
 				sorter.setMode(PixelSorter.BLACK);
 			}
 		});
-		buttonGroup.add(rdbtnBlackMode);
-		GridBagConstraints gbc_rdbtnBlackMode = new GridBagConstraints();
-		gbc_rdbtnBlackMode.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnBlackMode.gridx = 0;
-		gbc_rdbtnBlackMode.gridy = 1;
-		contentPane.add(rdbtnBlackMode, gbc_rdbtnBlackMode);
-		
-		rdbtnBrightnessMode = new JRadioButton("Brightness Mode");
-		rdbtnBrightnessMode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				sorter.setMode(PixelSorter.BRIGHT);
-			}
-		});
-		buttonGroup.add(rdbtnBrightnessMode);
-		GridBagConstraints gbc_rdbtnBrightnessMode = new GridBagConstraints();
-		gbc_rdbtnBrightnessMode.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnBrightnessMode.gridx = 1;
-		gbc_rdbtnBrightnessMode.gridy = 1;
-		contentPane.add(rdbtnBrightnessMode, gbc_rdbtnBrightnessMode);
-		
-		rdbtnWhiteMode = new JRadioButton("White Mode");
-		rdbtnWhiteMode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				sorter.setMode(PixelSorter.WHITE);
-			}
-		});
-		buttonGroup.add(rdbtnWhiteMode);
-		GridBagConstraints gbc_rdbtnWhiteMode = new GridBagConstraints();
-		gbc_rdbtnWhiteMode.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnWhiteMode.gridx = 2;
-		gbc_rdbtnWhiteMode.gridy = 1;
-		contentPane.add(rdbtnWhiteMode, gbc_rdbtnWhiteMode);
 		
 		rdbtnOriginal = new JRadioButton("Original");
 		rdbtnOriginal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				slider.setEnabled(false);
 				sorter.setMode(PixelSorter.ORIGINAL);
 			}
 		});
 		buttonGroup.add(rdbtnOriginal);
 		GridBagConstraints gbc_rdbtnOriginal = new GridBagConstraints();
-		gbc_rdbtnOriginal.insets = new Insets(0, 0, 5, 0);
-		gbc_rdbtnOriginal.gridx = 3;
+		gbc_rdbtnOriginal.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnOriginal.gridx = 0;
 		gbc_rdbtnOriginal.gridy = 1;
 		contentPane.add(rdbtnOriginal, gbc_rdbtnOriginal);
-		GridBagConstraints gbc_btnSort = new GridBagConstraints();
-		gbc_btnSort.gridwidth = 4;
-		gbc_btnSort.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnSort.gridx = 0;
-		gbc_btnSort.gridy = 2;
-		contentPane.add(btnSort, gbc_btnSort);
+		buttonGroup.add(rdbtnBlackMode);
+		GridBagConstraints gbc_rdbtnBlackMode = new GridBagConstraints();
+		gbc_rdbtnBlackMode.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnBlackMode.gridx = 1;
+		gbc_rdbtnBlackMode.gridy = 1;
+		contentPane.add(rdbtnBlackMode, gbc_rdbtnBlackMode);
+		buttonGroup.add(rdbtnBrightnessMode);
+		GridBagConstraints gbc_rdbtnBrightnessMode = new GridBagConstraints();
+		gbc_rdbtnBrightnessMode.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnBrightnessMode.gridx = 2;
+		gbc_rdbtnBrightnessMode.gridy = 1;
+		contentPane.add(rdbtnBrightnessMode, gbc_rdbtnBrightnessMode);
+		buttonGroup.add(rdbtnWhiteMode);
+		GridBagConstraints gbc_rdbtnWhiteMode = new GridBagConstraints();
+		gbc_rdbtnWhiteMode.insets = new Insets(0, 0, 5, 0);
+		gbc_rdbtnWhiteMode.gridx = 3;
+		gbc_rdbtnWhiteMode.gridy = 1;
+		contentPane.add(rdbtnWhiteMode, gbc_rdbtnWhiteMode);
+		
+		slider = new JSlider();
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				JSlider slider = (JSlider)arg0.getSource();
+				
+				if(!slider.getValueIsAdjusting())
+					sorter.setBrightness(slider.getValue());
+				
+			}
+		});
+		slider.setPaintTicks(true);
+		slider.setMinorTickSpacing(10);
+		slider.setMajorTickSpacing(50);
+		slider.setMaximum(255);
+		slider.setValue(0);
+		GridBagConstraints gbc_slider = new GridBagConstraints();
+		gbc_slider.fill = GridBagConstraints.HORIZONTAL;
+		gbc_slider.gridwidth = 4;
+		gbc_slider.insets = new Insets(0, 0, 0, 5);
+		gbc_slider.gridx = 0;
+		gbc_slider.gridy = 2;
+		contentPane.add(slider, gbc_slider);
 		
 	}
 
