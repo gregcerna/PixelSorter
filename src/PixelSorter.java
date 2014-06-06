@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 public class PixelSorter extends JPanel {
 
+	private static final long serialVersionUID = -3184172796602661277L;
 	
 	private BufferedImage img;
 	private BufferedImage origImg;
@@ -21,14 +22,21 @@ public class PixelSorter extends JPanel {
 	
 	
 	//MODE:
-	//0 -> black
-	//1 -> bright
-	//2 -> white
+	//-1 -> original
+	//0  -> black
+	//1  -> bright
+	//2  -> white
 	//b(16777216)
-	private int mode = 2;
+	
+	public static final int ORIGINAL = -1;
+	public static final int BLACK = 0;
+	public static final int BRIGHT = 1;
+	public static final int WHITE = 2;
+	
+	private int mode = BLACK;
 	
 	
-	private int blackValue = -10000000;
+	private int blackValue = -13487566;//-10000000;
 	private int brightnessValue = 60;
 	private int whiteValue = -6000000;
 	
@@ -40,16 +48,20 @@ public class PixelSorter extends JPanel {
 		super();
 	}
 	
+	public void setMode(int newMode){
+		mode = newMode;
+	}
+	
 	
 	public void loadImage(String fileName){
 		File file = new File(fileName);
+		
 		try {
 			img = ImageIO.read(file);
 			height = img.getHeight();
 			width = img.getWidth();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) {e.printStackTrace();}
+		
 		origImg = deepCopy(img);
 	}
 	
@@ -78,19 +90,20 @@ public class PixelSorter extends JPanel {
 	
 	public void draw() {
 		
-		
 		row = 0;
 		column = 0;
 		img = deepCopy(origImg);
-			
-		while(column < width-1) {
-			sortColumn();
-			column++;
-		}
-		  
-		while(row < height-1) {
-			sortRow();
-			row++;
+		
+		if(mode != ORIGINAL){
+			while(column < width-1) {
+				sortColumn();
+				column++;
+			}
+			  
+			while(row < height-1) {
+				sortRow();
+				row++;
+			}
 		}
 		  
 		repaint();
@@ -104,15 +117,15 @@ public class PixelSorter extends JPanel {
 	  
 	  while(xend < width-1) {
 	    switch(mode) {
-	      case 0:
+	      case BLACK:
 	        x = getFirstNotBlackX(x, y);
 	        xend = getNextBlackX(x, y);
 	        break;
-	      case 1:
+	      case BRIGHT:
 	        x = getFirstBrightX(x, y);
 	        xend = getNextDarkX(x, y);
 	        break;
-	      case 2:
+	      case WHITE:
 	        x = getFirstNotWhiteX(x, y);
 	        xend = getNextWhiteX(x, y);
 	        break;
@@ -148,15 +161,15 @@ public class PixelSorter extends JPanel {
 	  
 	  while(yend < height-1) {
 	    switch(mode) {
-	      case 0:
+	      case BLACK:
 	        y = getFirstNotBlackY(x, y);
 	        yend = getNextBlackY(x, y);
 	        break;
-	      case 1:
+	      case BRIGHT:
 	        y = getFirstBrightY(x, y);
 	        yend = getNextDarkY(x, y);
 	        break;
-	      case 2:
+	      case WHITE:
 	        y = getFirstNotWhiteY(x, y);
 	        yend = getNextWhiteY(x, y);
 	        break;
