@@ -16,9 +16,25 @@ public class PixelSorter extends JPanel {
 	
 	private BufferedImage img;
 	private BufferedImage origImg;
-	//private int[][] pixelArray;
-	int height;
-	int width;
+	private int height;
+	private int width;
+	
+	
+	//MODE:
+	//0 -> black
+	//1 -> bright
+	//2 -> white
+	//b(16777216)
+	private int mode = 2;
+	
+	
+	private int blackValue = -10000000;
+	private int brightnessValue = 60;
+	private int whiteValue = -6000000;
+	
+	private int row = 0;
+	private int column = 0;
+	
 	
 	public PixelSorter(){
 		super();
@@ -58,60 +74,30 @@ public class PixelSorter extends JPanel {
 		g.drawImage(img, 0, 0, null);
 		//repaint();
 	} 
-//}
-//*	
-	int mode = 2;
-
-	//MODE:
-	//0 -> black
-	//1 -> bright
-	//2 -> white
-	//b(16777216)
-
-	//PImage img;
-	
-
-	int loops = 1;
-
-	int blackValue = -10000000;
-	int brightnessValue = 60;
-	int whiteValue = -6000000;
-
-	int row = 0;
-	int column = 0;
-
-	boolean saved = false;
 
 	
-
-
-	void draw() {
-	  while(column < width-1) {
-	    //img.loadPixels(); 
-	    sortColumn();
-	    column++;
-	    //img.updatePixels();
-	  }
-	  
-	  while(row < height-1) {
-	    //img.loadPixels(); 
-	    sortRow();
-	    row++;
-	    //img.updatePixels();
-	  }
-	  
-	  //image(img,0,0);
-	  //if(!saved && frameCount >= loops) {
-	  //  saveFrame(imgFileName+"_"+mode+".png");
-	  //  saved = true;
-	  //  println("DONE"+frameCount);
-	  //  System.exit(0);
-	  //}
-	  repaint();
+	public void draw() {
+		
+		
+		row = 0;
+		column = 0;
+		img = deepCopy(origImg);
+			
+		while(column < width-1) {
+			sortColumn();
+			column++;
+		}
+		  
+		while(row < height-1) {
+			sortRow();
+			row++;
+		}
+		  
+		repaint();
 	}
 
 
-	void sortRow() {
+	private void sortRow() {
 	  int x = 0;
 	  int y = row;
 	  int xend = 0;
@@ -139,7 +125,6 @@ public class PixelSorter extends JPanel {
 	    int sortLength = xend-x;
 	    
 	    int[] pixels = new int[sortLength];
-	    //int[] sorted   = new int[sortLength];
 	    
 	    for(int i=0; i<sortLength; i++) {
 	      pixels[i] = img.getRGB(x+i, y);
@@ -156,7 +141,7 @@ public class PixelSorter extends JPanel {
 	}
 
 
-	void sortColumn() {
+	private void sortColumn() {
 	  int x = column;
 	  int y = 0;
 	  int yend = 0;
@@ -201,7 +186,7 @@ public class PixelSorter extends JPanel {
 
 
 	//BLACK
-	int getFirstNotBlackX(int _x, int _y) {
+	private int getFirstNotBlackX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
 	  Color c;
@@ -212,7 +197,7 @@ public class PixelSorter extends JPanel {
 	  return x;
 	}
 
-	int getNextBlackX(int _x, int _y) {
+	private int getNextBlackX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
 	  while((img.getRGB(x, y)) > blackValue) {
@@ -223,7 +208,7 @@ public class PixelSorter extends JPanel {
 	}
 
 	//BRIGHTNESS
-	int getFirstBrightX(int _x, int _y) {
+	private int getFirstBrightX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
 	  
@@ -234,7 +219,7 @@ public class PixelSorter extends JPanel {
 	  return x;
 	}
 
-	int getNextDarkX(int _x, int _y) {
+	private int getNextDarkX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
 	  
@@ -246,7 +231,7 @@ public class PixelSorter extends JPanel {
 	}
 
 	//WHITE
-	int getFirstNotWhiteX(int _x, int _y) {
+	private int getFirstNotWhiteX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
 	  
@@ -257,7 +242,7 @@ public class PixelSorter extends JPanel {
 	  return x;
 	}
 
-	int getNextWhiteX(int _x, int _y) {
+	private int getNextWhiteX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
 
@@ -270,7 +255,7 @@ public class PixelSorter extends JPanel {
 
 
 	//BLACK
-	int getFirstNotBlackY(int _x, int _y) {
+	private int getFirstNotBlackY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
 	  
@@ -283,7 +268,7 @@ public class PixelSorter extends JPanel {
 	  return y;
 	}
 
-	int getNextBlackY(int _x, int _y) {
+	private int getNextBlackY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y+1;
 	  
@@ -297,7 +282,7 @@ public class PixelSorter extends JPanel {
 	}
 
 	//BRIGHTNESS
-	int getFirstBrightY(int _x, int _y) {
+	private int getFirstBrightY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
 	  
@@ -310,7 +295,7 @@ public class PixelSorter extends JPanel {
 	  return y;
 	}
 
-	int getNextDarkY(int _x, int _y) {
+	private int getNextDarkY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y+1;
 	  
@@ -324,7 +309,7 @@ public class PixelSorter extends JPanel {
 	}
 
 	//WHITE
-	int getFirstNotWhiteY(int _x, int _y) {
+	private int getFirstNotWhiteY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
 	  
@@ -337,7 +322,7 @@ public class PixelSorter extends JPanel {
 	  return y;
 	}
 
-	int getNextWhiteY(int _x, int _y) {
+	private int getNextWhiteY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y+1;
 	  
