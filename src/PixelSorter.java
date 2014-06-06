@@ -56,11 +56,11 @@ public class PixelSorter extends JPanel {
 	public void paintComponent (Graphics g) 
 	{ 
 		g.drawImage(img, 0, 0, null);
-		repaint();
+		//repaint();
 	} 
 //}
 //*	
-	int mode = 0;
+	int mode = 2;
 
 	//MODE:
 	//0 -> black
@@ -74,7 +74,7 @@ public class PixelSorter extends JPanel {
 	int loops = 1;
 
 	int blackValue = -10000000;
-	int brigthnessValue = 60;
+	int brightnessValue = 60;
 	int whiteValue = -6000000;
 
 	int row = 0;
@@ -204,8 +204,8 @@ public class PixelSorter extends JPanel {
 	int getFirstNotBlackX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  color c;
-	  while((c = img.pixels[x + y * img.width]) < blackValue) {
+	  Color c;
+	  while((img.getRGB(x, y)) < blackValue) {
 	    x++;
 	    if(x >= width) return -1;
 	  }
@@ -215,8 +215,7 @@ public class PixelSorter extends JPanel {
 	int getNextBlackX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
-	  color c;
-	  while((c = img.pixels[x + y * img.width]) > blackValue) {
+	  while((img.getRGB(x, y)) > blackValue) {
 	    x++;
 	    if(x >= width) return width-1;
 	  }
@@ -227,8 +226,8 @@ public class PixelSorter extends JPanel {
 	int getFirstBrightX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  color c;
-	  while(brightness(c = img.pixels[x + y * img.width]) < brigthnessValue) {
+	  
+	  while(getBrightness(img.getRGB(x, y)) < brightnessValue) {
 	    x++;
 	    if(x >= width) return -1;
 	  }
@@ -238,8 +237,8 @@ public class PixelSorter extends JPanel {
 	int getNextDarkX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
-	  color c;
-	  while(brightness(c = img.pixels[x + y * img.width]) > brigthnessValue) {
+	  
+	  while(getBrightness(img.getRGB(x, y)) > brightnessValue) {
 	    x++;
 	    if(x >= width) return width-1;
 	  }
@@ -250,8 +249,8 @@ public class PixelSorter extends JPanel {
 	int getFirstNotWhiteX(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  color c;
-	  while((c = img.pixels[x + y * img.width]) > whiteValue) {
+	  
+	  while((img.getRGB(x, y)) > whiteValue) {
 	    x++;
 	    if(x >= width) return -1;
 	  }
@@ -261,8 +260,8 @@ public class PixelSorter extends JPanel {
 	int getNextWhiteX(int _x, int _y) {
 	  int x = _x+1;
 	  int y = _y;
-	  Color c;
-	  while((c = img.pixels[x + y * img.width]) < whiteValue) {
+
+	  while((img.getRGB(x, y)) < whiteValue) {
 	    x++;
 	    if(x >= width) return width-1;
 	  }
@@ -274,9 +273,9 @@ public class PixelSorter extends JPanel {
 	int getFirstNotBlackY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  Color c;
+	  
 	  if(y < height) {
-	    while((c = img.pixels[x + y * img.width]) < blackValue) {
+	    while((img.getRGB(x, y)) < blackValue) {
 	      y++;
 	      if(y >= height) return -1;
 	    }
@@ -287,9 +286,9 @@ public class PixelSorter extends JPanel {
 	int getNextBlackY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y+1;
-	  Color c;
+	  
 	  if(y < height) {
-	    while((c = img.pixels[x + y * img.width]) > blackValue) {
+	    while((img.getRGB(x, y)) > blackValue) {
 	      y++;
 	      if(y >= height) return height-1;
 	    }
@@ -301,9 +300,9 @@ public class PixelSorter extends JPanel {
 	int getFirstBrightY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  color c;
+	  
 	  if(y < height) {
-	    while(brightness(c = img.pixels[x + y * img.width]) < brigthnessValue) {
+	    while(getBrightness(img.getRGB(x, y)) < brightnessValue) {
 	      y++;
 	      if(y >= height) return -1;
 	    }
@@ -314,9 +313,9 @@ public class PixelSorter extends JPanel {
 	int getNextDarkY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y+1;
-	  color c;
+	  
 	  if(y < height) {
-	    while(brightness(c = img.pixels[x + y * img.width]) > brigthnessValue) {
+	    while(getBrightness(img.getRGB(x, y)) > brightnessValue) {
 	      y++;
 	      if(y >= height) return height-1;
 	    }
@@ -328,9 +327,9 @@ public class PixelSorter extends JPanel {
 	int getFirstNotWhiteY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y;
-	  color c;
+	  
 	  if(y < height) {
-	    while((c = img.pixels[x + y * img.width]) > whiteValue) {
+	    while((img.getRGB(x, y)) > whiteValue) {
 	      y++;
 	      if(y >= height) return -1;
 	    }
@@ -341,9 +340,9 @@ public class PixelSorter extends JPanel {
 	int getNextWhiteY(int _x, int _y) {
 	  int x = _x;
 	  int y = _y+1;
-	  color c;
+	  
 	  if(y < height) {
-	    while((c = img.pixels[x + y * img.width]) < whiteValue) {
+	    while((img.getRGB(x, y)) < whiteValue) {
 	      y++;
 	      if(y >= height) return height-1;
 	    }
@@ -351,6 +350,14 @@ public class PixelSorter extends JPanel {
 	  return y-1;
 	}
 
+	
+	private float getBrightness(int rgb){
+		Color color = new Color(rgb);
+		float average = color.getRed()+color.getGreen()+color.getBlue();
+		average /= 3;
+		
+		return average;
+	}
 	
 	
 	

@@ -7,6 +7,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class SorterFrame extends JFrame {
@@ -59,6 +62,18 @@ public class SorterFrame extends JFrame {
 		gbc_sorter.gridx = 0;
 		gbc_sorter.gridy = 0;
 		contentPane.add(sorter, gbc_sorter);
+		
+		JButton btnSort = new JButton("Sort");
+		btnSort.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sorter.draw();
+			}
+		});
+		GridBagConstraints gbc_btnSort = new GridBagConstraints();
+		gbc_btnSort.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnSort.gridx = 0;
+		gbc_btnSort.gridy = 1;
+		contentPane.add(btnSort, gbc_btnSort);
 		
 	}
 
