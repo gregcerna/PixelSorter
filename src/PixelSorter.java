@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class PixelSorter extends JPanel {
 	
 	
 	private int blackValue = -13487566;//-10000000;
-	private int brightnessValue = 0;
+	private int brightnessValue = 255;
 	private int whiteValue = -3618616;//-6000000;
 	
 	private int row = 0;
@@ -90,8 +91,10 @@ public class PixelSorter extends JPanel {
 	{ 
 		g.drawImage(img, 0, 0, null);
 		
-		setBrightness(brightnessValue+10);
+		setBrightness(brightnessValue-5);
 		//repaint();
+		//ImageIO.write(arg0, "", "cat_"+brightnessValue+".jpg");
+		
 	} 
 
 	

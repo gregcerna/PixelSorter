@@ -23,7 +23,7 @@ public class SorterFrame extends JFrame {
 	private PixelSorter sorter;
 	private final int borderWidth = 5;
 	
-	String imgName = "me.jpg";
+	String imgName = "cat.jpg";
 	private JRadioButton rdbtnBlackMode;
 	private JRadioButton rdbtnBrightnessMode;
 	private JRadioButton rdbtnWhiteMode;
@@ -146,7 +146,7 @@ public class SorterFrame extends JFrame {
 		slider.setMinorTickSpacing(10);
 		slider.setMajorTickSpacing(50);
 		slider.setMaximum(255);
-		slider.setValue(0);
+		slider.setValue(255);
 		GridBagConstraints gbc_slider = new GridBagConstraints();
 		gbc_slider.fill = GridBagConstraints.HORIZONTAL;
 		gbc_slider.gridwidth = 4;
